@@ -17,10 +17,14 @@ const func = async function (context, req) {
         };
     } catch(e) {
         context.log(e);
+        
+        const retry = e.code && e.retry && e.retry.errorCodes && Array.isArray(e.retry.errorCodes) && e.retry.errorCodes.includes(e.code);
         context.res = {
-            status: 500,
+            status: e.status || 500,
             body: {
-                message: e.message,
+                message: e,
+                retry,
+                status: e.status || 500,
             },
         };
     }
