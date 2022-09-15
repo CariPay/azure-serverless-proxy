@@ -3,14 +3,14 @@ import got from 'got';
 const func = async function (context, req) {
     try {
         const { data = {}, customHeaders = {} } = req.body
-        const { callback } = process.env;
+        const callback = process.env['CALLBACK'];
 
         const options = {
             headers: customHeaders,
             json: data,
         };
         const res = await got.post(`${callback}`, options);
-        
+
         context.log("Got code: ", res.statusCode)
         context.log("Got body: ", res.body)
 
