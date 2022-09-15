@@ -2,12 +2,15 @@ import got from 'got';
 
 const func = async function (context, req) {
     try {
-        const { ip, msg, port = 4000 } = req.body
+        const { data = {}, customHeaders = {} } = req.body
+        const { callback } = process.env;
 
-        context.log("Got ip: ", ip)
-        context.log("Got port: ", port)
-
-        const res = await got(`http://${ip}:${port}?message=${msg}`)
+        const options = {
+            headers: customHeaders,
+            json: data,
+        };
+        const res = await got.post(`${callback}`, options);
+        
         context.log("Got code: ", res.statusCode)
         context.log("Got body: ", res.body)
 
